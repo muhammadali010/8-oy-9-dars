@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactSpeedometer from "react-d3-speedometer";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface PersonInfo {
   firstName: string;
