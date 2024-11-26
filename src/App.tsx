@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactSpeedometer from "react-d3-speedometer";
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -29,6 +20,7 @@ interface PersonInfo {
 interface ChartItem {
   label: string;
   value: number;
+  color: string; 
 }
 
 const App = () => {
@@ -47,7 +39,6 @@ const App = () => {
       .then((response) => response.json())
       .then((data: ChartItem[]) => {
         if (Array.isArray(data)) {
-          console.log("Fetched charts data:", data);
           setCharts(data);
         }
       })
@@ -55,19 +46,12 @@ const App = () => {
   }, []);
 
   const chartData = {
-    labels: charts.length > 0 ? charts.map((item) => item.label) : [],
+    labels: charts.map((item) => item.label),
     datasets: [
       {
         label: "Тест натижалари (%)",
-        data: charts.length > 0 ? charts.map((item) => item.value) : [],
-        backgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-          "#FF9F40",
-        ],
+        data: charts.map((item) => item.value),
+        backgroundColor: charts.map((item) => item.color), 
       },
     ],
   };
@@ -133,34 +117,6 @@ const App = () => {
           <p className="w-96 font-normal mb-20 text-xl text-gray-800">{personInfo?.position || "No position"}</p>
           <h4 className="text-gray-500 mb-2 text-base">Номзод:</h4>
           <p className="w-96 font-normal text-xl text-gray-800">{personInfo?.candidate || "No candidate info"}</p>
-        </div>
-      </div>
-
-      <div className="mt-12">
-        <h2 className="text-2xl font-semibold mb-6">Билим тести</h2>
-        <div className="grid grid-cols-3 gap-6">
-          {charts.length > 0 ? (
-            charts.map((chart, index) => (
-              <div key={index} className="bg-gray-100 p-4 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-2">{chart.label}</h3>
-                <div className="relative h-4 bg-gray-300 rounded-lg">
-                  <div
-                    className="absolute top-0 left-0 h-4 rounded-lg bg-blue-500"
-                    style={{ width: `${chart.value}%` }}
-                  ></div>
-                </div>
-                <p className="mt-2 text-center font-bold">{chart.value}%</p>
-              </div>
-            ))
-          ) : (
-            <p>No data available</p>
-          )}
-        </div>
-        <div className="mt-10">
-          <h3 className="text-2xl font-semibold mb-4">Тест натижалари график кўриниши</h3>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <Bar data={chartData} />
-          </div>
         </div>
       </div>
     </div>
